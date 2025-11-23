@@ -226,6 +226,6 @@ body.keyboard-visible .pb-safe {
   }
 
   .pt-safe {
-    padding-top: env(safe-area-inset-top);
+    padding-top: max(1rem, env(safe-area-inset-top));
   }
 }
