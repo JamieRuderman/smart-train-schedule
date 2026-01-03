@@ -137,7 +137,7 @@ export const StickyHeader = memo(function StickyHeader({
                 id="route-planning-title"
                 className="flex flex-wrap items-center justify-between my-2"
               >
-                Plan Your Journey
+                Plan Your Trip
                 <a
                   href="https://github.com/JamieRuderman/smart-train-schedule"
                   target="_blank"
