@@ -1,37 +1,47 @@
 import type { RefObject } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Configuration - adjust these to match actual rendered heights
 export const HEADER_HEIGHTS = {
   title: 40, // Height of "Plan Your Journey" title
-  logo: 88, // Height of SMART logo
+  logo: {
+    small: 88,
+    large: 130,
+  },
   tabs: 56, // Height of Weekday/Weekend tabs
 };
 
 const SCROLL_START = 0; // Start shrinking immediately
-const TOTAL_DISTANCE =
-  HEADER_HEIGHTS.title + HEADER_HEIGHTS.logo + HEADER_HEIGHTS.tabs;
+const LOGO_MEDIA_QUERY = "(min-width: 640px)";
+
+type HeaderHeights = {
+  title: number;
+  logo: number;
+  tabs: number;
+  total: number;
+};
 
 const setHeaderHeights = (
   container: HTMLElement,
+  heights: HeaderHeights,
   scrolledPixels: number
 ) => {
   // Sequential shrinking: Title → Logo → Tabs
   const titleHeight = Math.max(
     0,
-    Math.round(HEADER_HEIGHTS.title - scrolledPixels)
+    Math.round(heights.title - scrolledPixels)
   );
   const logoHeight = Math.max(
     0,
     Math.round(
-      HEADER_HEIGHTS.logo - Math.max(0, scrolledPixels - HEADER_HEIGHTS.title)
+      heights.logo - Math.max(0, scrolledPixels - heights.title)
     )
   );
   const tabsHeight = Math.max(
     0,
     Math.round(
-      HEADER_HEIGHTS.tabs -
-        Math.max(0, scrolledPixels - HEADER_HEIGHTS.title - HEADER_HEIGHTS.logo)
+      heights.tabs -
+        Math.max(0, scrolledPixels - heights.title - heights.logo)
     )
   );
 
@@ -40,8 +50,39 @@ const setHeaderHeights = (
   container.style.setProperty("--header-tabs-height", `${tabsHeight}px`);
 };
 
+export function useResponsiveHeaderHeights(): HeaderHeights {
+  const [isLargeLogo, setIsLargeLogo] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(LOGO_MEDIA_QUERY);
+    const updateMatch = () => setIsLargeLogo(mediaQuery.matches);
+
+    updateMatch();
+    mediaQuery.addEventListener("change", updateMatch);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMatch);
+    };
+  }, []);
+
+  return useMemo(() => {
+    const logo = isLargeLogo
+      ? HEADER_HEIGHTS.logo.large
+      : HEADER_HEIGHTS.logo.small;
+    const total = HEADER_HEIGHTS.title + logo + HEADER_HEIGHTS.tabs;
+
+    return {
+      title: HEADER_HEIGHTS.title,
+      logo,
+      tabs: HEADER_HEIGHTS.tabs,
+      total,
+    };
+  }, [isLargeLogo]);
+}
+
 export function useStickyHeaderCollapse(
-  containerRef: RefObject<HTMLElement>
+  containerRef: RefObject<HTMLElement>,
+  heights: HeaderHeights
 ) {
   const ticking = useRef(false);
 
@@ -58,15 +99,15 @@ export function useStickyHeaderCollapse(
       if (currentScrollY <= SCROLL_START) {
         // Before scroll start - fully expanded
         progress = 0;
-      } else if (currentScrollY >= SCROLL_START + TOTAL_DISTANCE) {
+      } else if (currentScrollY >= SCROLL_START + heights.total) {
         // After scroll end - fully collapsed
         progress = 1;
       } else {
         // In between - interpolate
-        progress = (currentScrollY - SCROLL_START) / TOTAL_DISTANCE;
+        progress = (currentScrollY - SCROLL_START) / heights.total;
       }
-      const scrolledPixels = progress * TOTAL_DISTANCE;
-      setHeaderHeights(container, scrolledPixels);
+      const scrolledPixels = progress * heights.total;
+      setHeaderHeights(container, heights, scrolledPixels);
     };
 
     const handleScroll = () => {
@@ -88,5 +129,5 @@ export function useStickyHeaderCollapse(
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [containerRef]);
+  }, [containerRef, heights]);
 }

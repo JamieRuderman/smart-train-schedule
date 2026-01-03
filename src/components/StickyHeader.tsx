@@ -20,7 +20,7 @@ import {
 import { getAllStations, hasFerryConnection } from "@/lib/stationUtils";
 import type { Station } from "@/types/smartSchedule";
 import {
-  HEADER_HEIGHTS,
+  useResponsiveHeaderHeights,
   useStickyHeaderCollapse,
 } from "@/hooks/useHeaderHeights";
 import { ShrinkingContainer } from "./ShrinkingContainer";
@@ -91,7 +91,8 @@ export const StickyHeader = memo(function StickyHeader({
 }: StickyHeaderProps) {
   const stations = getAllStations();
   const headerRef = useRef<HTMLDivElement>(null);
-  useStickyHeaderCollapse(headerRef);
+  const headerHeights = useResponsiveHeaderHeights();
+  useStickyHeaderCollapse(headerRef, headerHeights);
 
   return (
     <div
@@ -106,7 +107,7 @@ export const StickyHeader = memo(function StickyHeader({
       >
         <ShrinkingContainer
           heightVar="--header-logo-height"
-          maxHeight={HEADER_HEIGHTS.logo}
+          maxHeight={headerHeights.logo}
         >
           <img
             src={smartLogo}
@@ -128,7 +129,7 @@ export const StickyHeader = memo(function StickyHeader({
           <CardHeader className="px-5 py-2">
             <ShrinkingContainer
               heightVar="--header-title-height"
-              maxHeight={HEADER_HEIGHTS.title}
+              maxHeight={headerHeights.title}
             >
               <CardTitle
                 id="route-planning-title"
@@ -243,7 +244,7 @@ export const StickyHeader = memo(function StickyHeader({
             {/* Schedule Type Tabs */}
             <ShrinkingContainer
               heightVar="--header-tabs-height"
-              maxHeight={HEADER_HEIGHTS.tabs}
+              maxHeight={headerHeights.tabs}
             >
               <Tabs
                 value={scheduleType}
