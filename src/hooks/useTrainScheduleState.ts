@@ -13,7 +13,7 @@ export interface TrainScheduleState {
   showServiceAlert: boolean;
 }
 
-export function useTrainScheduleState() {
+export function useTrainScheduleState(scheduleDataVersion?: string) {
   const { preferences, isLoaded, updateLastSelected } = useUserPreferences();
 
   // Initialize state
@@ -53,7 +53,7 @@ export function useTrainScheduleState() {
       state.toStation,
       state.scheduleType
     );
-  }, [state.fromStation, state.toStation, state.scheduleType]);
+  }, [state.fromStation, state.toStation, state.scheduleType, scheduleDataVersion]);
 
   // Action handlers
   const setFromStation = useCallback(

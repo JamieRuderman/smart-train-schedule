@@ -1,11 +1,9 @@
 import stations from "@/data/stations";
-import { trainSchedules, type ScheduleType } from "@/data/trainSchedules";
 import {
-  weekdayFerries,
-  weekendFerries,
-  weekdayInboundFerries,
-  weekendInboundFerries,
-} from "@/data/ferrySchedule";
+  bundledSchedulePayload,
+  type SchedulePayload,
+} from "@/data/scheduleData";
+import type { ScheduleType } from "@/data/trainSchedules";
 import { stationIndexMap, calculateZonesBetweenStations } from "./stationUtils";
 import { parseTimeToMinutes, isTimeInPast } from "./timeUtils";
 import { FARE_CONSTANTS, FERRY_CONSTANTS, FARE_TYPES } from "./fareConstants";
@@ -63,8 +61,9 @@ stations.forEach((fromStation, fromIndex) => {
 });
 
 // Pre-process schedule data
-function processScheduleData(): ScheduleCache {
+function processScheduleData(payload: SchedulePayload): ScheduleCache {
   const cache: ScheduleCache = {};
+  const { trainSchedules, ferrySchedules } = payload;
 
   // Validate that train schedules data is loaded
   if (!trainSchedules || !trainSchedules.weekday || !trainSchedules.weekend) {
@@ -197,14 +196,14 @@ function processScheduleData(): ScheduleCache {
   processScheduleType(
     trainSchedules.weekday,
     "weekday",
-    weekdayFerries,
-    weekdayInboundFerries
+    ferrySchedules.weekdayFerries,
+    ferrySchedules.weekdayInboundFerries
   );
   processScheduleType(
     trainSchedules.weekend,
     "weekend",
-    weekendFerries,
-    weekendInboundFerries
+    ferrySchedules.weekendFerries,
+    ferrySchedules.weekendInboundFerries
   );
 
   return cache;
@@ -213,10 +212,18 @@ function processScheduleData(): ScheduleCache {
 // Pre-processed schedule cache
 let scheduleCache: ScheduleCache;
 try {
-  scheduleCache = processScheduleData();
+  scheduleCache = processScheduleData(bundledSchedulePayload);
 } catch (error) {
   console.error("[ScheduleUtils] Error processing schedule data:", error);
   scheduleCache = {};
+}
+
+export function setScheduleData(payload: SchedulePayload): void {
+  try {
+    scheduleCache = processScheduleData(payload);
+  } catch (error) {
+    console.error("[ScheduleUtils] Error processing schedule data:", error);
+  }
 }
 
 // Fast lookup functions

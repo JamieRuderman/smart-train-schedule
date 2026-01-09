@@ -24,6 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const OUTPUT_DIR = path.resolve(__dirname, "../src/data/generated");
+const PUBLIC_DATA_DIR = path.resolve(__dirname, "../public/data");
 
 if (stations.length !== STATION_COUNT) {
   throw new Error(
@@ -447,6 +448,24 @@ export default {
   fs.writeFileSync(outputPath, content, "utf-8");
 }
 
+function emitPublicScheduleJson(
+  trainSchedules: TrainSchedulesOutput,
+  ferrySchedules: FerrySchedulesOutput
+): void {
+  if (!fs.existsSync(PUBLIC_DATA_DIR)) {
+    fs.mkdirSync(PUBLIC_DATA_DIR, { recursive: true });
+  }
+
+  const payload = {
+    generatedAt: new Date().toISOString(),
+    trainSchedules,
+    ferrySchedules,
+  };
+
+  const outputPath = path.resolve(PUBLIC_DATA_DIR, "schedules.json");
+  fs.writeFileSync(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
+}
+
 async function updateFeeds(): Promise<void> {
   const apiKey = process.env.TRANSIT_511_API_KEY;
 
@@ -469,6 +488,7 @@ async function updateFeeds(): Promise<void> {
   console.log("Processing Golden Gate Ferry GTFS feed...");
   const ferrySchedules = buildFerrySchedules(ferryGtfs);
   emitFerrySchedulesFile(ferrySchedules);
+  emitPublicScheduleJson(trainSchedules, ferrySchedules);
 
   const trainTripCounts = {
     weekdaySouthbound: trainSchedules.weekday.southbound.length,
