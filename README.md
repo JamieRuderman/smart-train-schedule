@@ -21,6 +21,7 @@ This is an open-source community project and is not an official SMART app.
 - **Styling**: Tailwind CSS with custom SMART branding
 - **UI Components**: Radix UI primitives with shadcn/ui
 - **Build Tool**: Vite for fast development and building
+- **Mobile**: Capacitor for native iOS and Android apps
 - **Routing**: React Router DOM
 - **State Management**: React hooks with optimized performance
 - **Code Quality**: ESLint, TypeScript strict mode
@@ -50,7 +51,7 @@ npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. Open your browser and navigate to `http://localhost:3210`
 
 ### Build for Production
 
@@ -112,6 +113,10 @@ Train schedule data is organized by:
 - `npm run update-transit` - Refresh schedules from the 511.org GTFS feeds
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run sync` - Build and sync to native iOS/Android projects (production)
+- `npm run sync:live` - Sync with live reload for native development
+- `npm run open:ios` - Open iOS project in Xcode
+- `npm run open:android` - Open Android project in Android Studio
 
 ### Project Structure
 
@@ -133,6 +138,38 @@ src/
 ├── types/               # TypeScript type definitions
 └── pages/               # Page components
 ```
+
+## 📱 Mobile Development
+
+The app uses Capacitor to build native iOS and Android apps from the same codebase.
+
+### Building for Production
+
+```bash
+npm run sync          # Build web assets and sync to native projects
+npm run open:ios      # Open in Xcode
+npm run open:android  # Open in Android Studio
+```
+
+Then build and run from the native IDE.
+
+### Development with Live Reload
+
+For faster development iteration with live reload on device/simulator:
+
+1. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+
+2. In another terminal, sync with live reload:
+   ```bash
+   npm run sync:live
+   ```
+
+3. Open and run from Xcode or Android Studio. Changes to the web code will appear instantly.
+
+**Note**: `sync:live` auto-detects your Mac's WiFi IP address. Your device/simulator must be on the same network.
 
 ## ♿ Accessibility
 

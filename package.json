@@ -25,6 +25,7 @@
     "update-build": "npm run update-transit && npm run build",
     "update-transit": "tsx scripts/updateTransitFeeds.ts",
     "sync": "npm run build && npx cap sync",
+    "sync:live": "CAPACITOR_LIVE_RELOAD_URL=http://$(ipconfig getifaddr en0):3210 npx cap sync",
     "open:android": "npx cap open android",
     "open:ios": "npx cap open ios"
   },
