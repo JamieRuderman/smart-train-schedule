@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react";
 export function NoMoreTrainsAlert() {
   return (
     <div
-      className="mb-3 -mt-4 p-3 bg-smart-gold/10 border border-smart-gold/20 rounded-lg"
+      className="mb-3 p-3 bg-smart-gold/10 border border-smart-gold/20 rounded-lg"
       role="alert"
       aria-live="polite"
     >

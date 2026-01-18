@@ -34,7 +34,7 @@ export function FareSection({ fromStation, toStation }: FareSectionProps) {
   };
 
   return (
-    <Card className="border-0 shadow-none md:border md:shadow-sm max-w-4xl mx-auto">
+    <Card className="border-0 shadow-none md:border md:shadow-sm max-w-4xl mx-auto w-full">
       <CardHeader className="p-3 md:p-6 pb-0 md:pb-0">
         <CardTitle className="flex items-center justify-between gap-2">
           Fare Information

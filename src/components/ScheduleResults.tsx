@@ -41,7 +41,7 @@ export function ScheduleResults({
   if (!direction) return null;
 
   return (
-    <Card className="border-0 shadow-none md:border md:shadow-sm max-w-4xl mx-auto">
+    <Card className="border-0 shadow-none md:border md:shadow-sm max-w-4xl mx-auto w-full">
       <ScheduleHeader
         direction={direction.direction}
         currentTime={currentTime}

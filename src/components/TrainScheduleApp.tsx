@@ -57,7 +57,7 @@ export function TrainScheduleApp() {
       />
 
       <main
-        className="container mx-auto px-4 pb-4 md:pb-6 space-y-4"
+        className="flex flex-col min-h-[100vh] container mx-auto px-4 pb-4 md:pb-6 space-y-4"
         role="main"
         aria-label="Train schedule planning interface"
         style={{
