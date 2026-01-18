@@ -6,6 +6,7 @@ import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 type Theme = "dark" | "light" | "system";
 
 const isNative = () => Capacitor.isNativePlatform();
+const isAndroid = () => Capacitor.getPlatform() === "android";
 
 const resolveSystemTheme = () => {
   if (typeof window === "undefined" || !window.matchMedia) {
@@ -19,19 +20,33 @@ const resolveSystemTheme = () => {
 
 const applyStatusBarTheme = async (theme: "dark" | "light") => {
   const style = theme === "dark" ? StatusBarStyle.Dark : StatusBarStyle.Light;
-  const backgroundColor = theme === "dark" ? "#0f172a" : "#ffffff";
 
-  await Promise.allSettled([
-    StatusBar.setStyle({ style }),
-    StatusBar.setBackgroundColor({ color: backgroundColor }),
-  ]);
+  if (isAndroid()) {
+    // Android edge-to-edge: transparent status bar
+    await Promise.allSettled([
+      StatusBar.setStyle({ style }),
+      StatusBar.setBackgroundColor({ color: "#00000000" }),
+    ]);
+  } else {
+    // iOS: solid background
+    const backgroundColor = theme === "dark" ? "#0f172a" : "#ffffff";
+    await Promise.allSettled([
+      StatusBar.setStyle({ style }),
+      StatusBar.setBackgroundColor({ color: backgroundColor }),
+    ]);
+  }
 };
 
 export function useNativeUi(theme: Theme) {
   useEffect(() => {
     if (!isNative()) return;
 
-    StatusBar.setOverlaysWebView({ overlay: false }).catch(() => undefined);
+    // Add platform class to body for platform-specific CSS
+    if (isAndroid()) {
+      document.body.classList.add("platform-android");
+      // Android: enable edge-to-edge fullscreen mode
+      StatusBar.setOverlaysWebView({ overlay: true }).catch(() => undefined);
+    }
 
     Keyboard.setResizeMode({ mode: KeyboardResize.Body }).catch(
       () => undefined

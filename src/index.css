@@ -227,6 +227,11 @@ body.keyboard-visible .pb-safe {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
+  /* Extra bottom padding for Android edge-to-edge navigation bar */
+  .platform-android .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+
   .pt-safe {
     padding-top: var(--safe-area-top);
   }
