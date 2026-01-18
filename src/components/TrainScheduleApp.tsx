@@ -62,7 +62,7 @@ export function TrainScheduleApp() {
         aria-label="Train schedule planning interface"
         style={{
           overflowAnchor: "none",
-          paddingTop: `calc(${maxHeaderHeight}px + 1rem)`,
+          paddingTop: `calc(${maxHeaderHeight}px + var(--safe-area-top))`,
         }}
       >
         {/* Service Alerts */}

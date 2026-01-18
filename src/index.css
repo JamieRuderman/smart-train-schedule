@@ -69,6 +69,9 @@ All colors MUST be HSL.
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease;
 
+    /* Safe area insets */
+    --safe-area-top: max(1rem, env(safe-area-inset-top, 0px));
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -169,7 +172,6 @@ All colors MUST be HSL.
     margin: 0;
     min-height: 100vh;
     min-height: 100dvh;
-    padding-bottom: env(safe-area-inset-bottom);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -222,10 +224,10 @@ body.keyboard-visible .pb-safe {
 
 @layer utilities {
   .pb-safe {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 2rem);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .pt-safe {
-    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-top: var(--safe-area-top);
   }
 }
