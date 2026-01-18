@@ -24,9 +24,9 @@
     "preview": "vite preview",
     "update-build": "npm run update-transit && npm run build",
     "update-transit": "tsx scripts/updateTransitFeeds.ts",
-    "cap:sync": "npm run build && npx cap sync",
-    "cap:open:android": "npx cap open android",
-    "cap:open:ios": "npx cap open ios"
+    "sync": "npm run build && npx cap sync",
+    "open:android": "npx cap open android",
+    "open:ios": "npx cap open ios"
   },
   "dependencies": {
     "@capacitor/app": "^6.0.2",
