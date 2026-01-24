@@ -76,16 +76,16 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/web-wide-01.png",
+      "src": "/screenshots/web-wide.png",
       "sizes": "2358x1640",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/web-wide-02.png",
-      "sizes": "2354x1640",
+      "src": "/screenshots/web-narrow.png",
+      "sizes": "1170x2532",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": "narrow"
     }
   ]
 }
