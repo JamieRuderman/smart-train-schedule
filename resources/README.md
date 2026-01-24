@@ -15,6 +15,12 @@ Place your source images here for generating app icons and splash screens.
 - Keep important content centered in a ~1200x1200 safe zone
 - Used to generate all splash screen sizes for iOS and Android
 
+### `splash-dark.png`
+- **Size**: 2732x2732 pixels
+- **Format**: PNG
+- Optional dark-mode splash screen.
+- If omitted, the light splash is used for dark mode.
+
 ## Optional Files
 
 ### `icon-foreground.png`
@@ -39,4 +45,5 @@ This will generate all required sizes and place them in the iOS and Android proj
 
 - **Icon**: Keep it simple and recognizable at small sizes. Avoid fine details.
 - **Splash**: Use a solid background color that matches your app's theme.
+- **Dark Splash**: Match your app's dark background (e.g., `#14161a`) or keep the same artwork if it works in both modes.
 - **Colors**: Consider using SMART's brand green (#11ab75) as your primary color.

@@ -26,7 +26,7 @@
     "update-transit": "tsx scripts/updateTransitFeeds.ts",
     "sync": "npm run build && CAPACITOR_LIVE_RELOAD_URL= npx cap sync",
     "sync-live": "CAPACITOR_LIVE_RELOAD_URL=http://$(ipconfig getifaddr en0):3210 npx cap sync",
-    "assets": "npx @capacitor/assets generate --iconBackgroundColor '#11ab75' --splashBackgroundColor '#11ab75' --splashBackgroundColorDark '#11ab75'",
+    "assets": "npx @capacitor/assets generate --iconBackgroundColor '#11ab75' --splashBackgroundColor '#11ab75' --splashBackgroundColorDark '#14161A'",
     "open-android": "npx cap open android",
     "open-ios": "npx cap open ios",
     "version": "sh scripts/version.sh"
