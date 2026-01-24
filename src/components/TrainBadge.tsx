@@ -1,5 +1,5 @@
-import { TrainFront } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TripIcon } from "@/components/icons/TripIcon";
 
 interface TrainBadgeProps {
   tripNumber: number;
@@ -22,7 +22,7 @@ export function TrainBadge({
         isPastTrip && showAllTrips && "text-muted-foreground/60"
       )}
     >
-      <TrainFront className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+      <TripIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
       <span className="text-2xl font-semibold min-w-[1.5rem]">
         {tripNumber}
       </span>

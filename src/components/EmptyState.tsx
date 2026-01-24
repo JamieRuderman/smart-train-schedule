@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { TrainFront } from "lucide-react";
+import { TripIcon } from "@/components/icons/TripIcon";
 
 export function EmptyState() {
   return (
@@ -9,10 +9,10 @@ export function EmptyState() {
       aria-live="polite"
     >
       <CardContent className="flex flex-col items-center gap-4 pb-0 pt-4">
-        <TrainFront
+        <TripIcon
           className="h-8 w-8 text-primary"
           aria-hidden="true"
-          style={{ strokeWidth: 1.5 }}
+          strokeWidth={1.5}
         />
         <h2 className="text-xl font-semibold">Select Your Route</h2>
         <p className="text-muted-foreground text-sm max-w-md mx-auto">
