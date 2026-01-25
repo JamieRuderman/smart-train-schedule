@@ -1,45 +1,64 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import capacitorLanguageDetector, { initDeviceLanguage } from "./capacitorLanguageDetector";
 import enTranslations from "./translations/en.json";
 import esTranslations from "./translations/es.json";
 
-i18n.use(LanguageDetector).use(initReactI18next).init({
-  resources: {
-    en: {
-      translation: enTranslations,
+// Detection order:
+// 1. localStorage (user preference) takes precedence
+// 2. capacitorDevice (native device language on Android/iOS)
+// 3. navigator (browser language for web)
+// 4. htmlTag (fallback)
+const detectionOrder = ["localStorage", "capacitorDevice", "navigator", "htmlTag"];
+
+// Create LanguageDetector instance and add custom Capacitor detector
+const languageDetector = new LanguageDetector();
+languageDetector.addDetector(capacitorLanguageDetector);
+
+i18n
+  .use(languageDetector)
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: {
+        translation: enTranslations,
+      },
+      es: {
+        translation: esTranslations,
+      },
     },
-    es: {
-      translation: esTranslations,
+    fallbackLng: "en",
+    supportedLngs: ["en", "es"],
+    // Force language to be one of our supported base languages
+    load: "languageOnly", // Only load "es" not "es-MX"
+    detection: {
+      // Order of detection methods
+      order: detectionOrder,
+      // Keys to lookup language from
+      lookupLocalStorage: "smart-train-language",
+      // Disable automatic caching - we manually manage localStorage
+      // This allows system language changes to be detected when no manual selection exists
+      caches: [],
+      // Convert detected language codes to our supported languages
+      convertDetectedLanguage: (lng: string) => {
+        // Extract base language code (e.g., "es" from "es-MX", "en" from "en-US")
+        const baseLang = lng.toLowerCase().split("-")[0];
+        // Return if supported, otherwise return undefined to use fallback
+        return ["en", "es"].includes(baseLang) ? baseLang : undefined;
+      },
     },
-  },
-  fallbackLng: "en",
-  supportedLngs: ["en", "es"],
-  // Force language to be one of our supported base languages
-  load: "languageOnly", // Only load "es" not "es-MX"
-  detection: {
-    // Order of detection methods
-    // localStorage first (user preference), then navigator (device/browser language)
-    order: ["localStorage", "navigator", "htmlTag"],
-    // Keys to lookup language from
-    lookupLocalStorage: "smart-train-language",
-    // Cache user language
-    caches: ["localStorage"],
-    // Convert detected language codes to our supported languages
-    convertDetectedLanguage: (lng: string) => {
-      // Extract base language code (e.g., "es" from "es-MX", "en" from "en-US")
-      const baseLang = lng.toLowerCase().split("-")[0];
-      // Return if supported, otherwise return undefined to use fallback
-      return ["en", "es"].includes(baseLang) ? baseLang : undefined;
+    interpolation: {
+      escapeValue: false, // React already escapes
     },
-  },
-  interpolation: {
-    escapeValue: false, // React already escapes
-  },
-  react: {
-    useSuspense: false, // Disable suspense for better compatibility
-  },
-});
+    react: {
+      useSuspense: false, // Disable suspense for better compatibility
+    },
+  });
+
+// Initialize device language detection after i18next init
+// This pre-fetches the device language for the detector to use
+initDeviceLanguage();
 
 // Update document language attribute when language changes
 i18n.on("languageChanged", (lng) => {

@@ -76,6 +76,7 @@
   "language": {
     "english": "English",
     "spanish": "Español",
+    "system": "System",
     "toggle": "Toggle language"
   },
   "ferry": {

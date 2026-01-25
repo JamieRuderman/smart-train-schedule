@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "./ThemeProvider";
 import { useTranslation } from "react-i18next";
@@ -31,6 +32,14 @@ export function ThemeToggle() {
           }
         >
           <DropdownMenuRadioItem
+            value="system"
+            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
+          >
+            <Monitor className="mr-2 h-4 w-4" />
+            <span>{t("theme.system")}</span>
+          </DropdownMenuRadioItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioItem
             value="light"
             className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
           >
@@ -43,13 +52,6 @@ export function ThemeToggle() {
           >
             <Moon className="mr-2 h-4 w-4" />
             <span>{t("theme.dark")}</span>
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="system"
-            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
-          >
-            <Monitor className="mr-2 h-4 w-4" />
-            <span>{t("theme.system")}</span>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

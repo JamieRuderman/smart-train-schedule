@@ -6,14 +6,19 @@ import {
   DropdownMenuTrigger,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
+import { getSystemLanguage } from "@/lib/capacitorLanguageDetector";
 
 export function LanguageToggle() {
   const { i18n, t } = useTranslation();
-  
+
+  const hasStoredLanguage =
+    typeof window !== "undefined" && !!window.localStorage?.getItem("smart-train-language");
+
   // Normalize language to base code (e.g., "es-MX" -> "es")
-  const currentLang = i18n.language?.split("-")[0] || "en";
+  const currentLang = hasStoredLanguage ? i18n.language?.split("-")[0] || "en" : "system";
 
   return (
     <DropdownMenu>
@@ -26,12 +31,34 @@ export function LanguageToggle() {
       <DropdownMenuContent align="end">
         <DropdownMenuRadioGroup
           value={currentLang}
-          onValueChange={(value) => {
-            // Normalize to base language code (i18next will save to localStorage via LanguageDetector)
+          onValueChange={async (value) => {
+            if (value === "system") {
+              if (typeof window !== "undefined" && window.localStorage) {
+                window.localStorage.removeItem("smart-train-language");
+              }
+              const systemLang = await getSystemLanguage();
+              i18n.changeLanguage(systemLang);
+              return;
+            }
+
+            // Normalize to base language code
             const normalizedLang = value.split("-")[0];
+
+            if (typeof window !== "undefined" && window.localStorage) {
+              window.localStorage.setItem("smart-train-language", normalizedLang);
+            }
+
+            // Change language (i18next won't auto-cache since caches: [])
             i18n.changeLanguage(normalizedLang);
           }}
         >
+          <DropdownMenuRadioItem
+            value="system"
+            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
+          >
+            <span>{t("language.system")}</span>
+          </DropdownMenuRadioItem>
+          <DropdownMenuSeparator />
           <DropdownMenuRadioItem
             value="en"
             className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
