@@ -1,3 +1,5 @@
+import { isDev } from "@/lib/env";
+
 /**
  * Simple logging utility for consistent error handling
  */
@@ -21,7 +23,7 @@ export const logger = {
    * Log info in development mode only
    */
   info: (message: string, data?: unknown) => {
-    if (import.meta.env.DEV) {
+    if (isDev) {
       console.info(`[SMART Train] ${message}`, data || "");
     }
   },

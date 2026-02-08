@@ -2,6 +2,7 @@ import { Component, ErrorInfo, ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import { isDev } from "@/lib/env";
 
 interface Props {
   children: ReactNode;
@@ -65,7 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
               been logged and we'll work to fix it.
             </p>
 
-            {process.env.NODE_ENV === "development" && this.state.error && (
+            {isDev && this.state.error && (
               <details className="mt-4">
                 <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">
                   Error Details (Development Only)

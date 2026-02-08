@@ -18,6 +18,7 @@
     "url": "."
   },
   "scripts": {
+    "prebuild": "tsx scripts/publishScheduleData.ts",
     "build": "tsc --noEmit && vite build",
     "dev": "vite",
     "lint": "eslint .",

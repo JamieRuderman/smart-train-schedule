@@ -4,14 +4,10 @@ import {
   isSchedulePayload,
   type SchedulePayload,
 } from "@/data/scheduleData";
+import { scheduleUrl } from "@/lib/env";
 import { setScheduleData } from "@/lib/scheduleUtils";
 
 const STORAGE_KEY = "smart-schedule-payload";
-const SCHEDULE_URL = "https://smart-train-schedule.vercel.app/data/schedules.json";
-
-function resolveScheduleUrl(): string | undefined {
-  return SCHEDULE_URL;
-}
 
 function loadCachedPayload(): SchedulePayload | null {
   if (typeof window === "undefined") return null;
@@ -45,9 +41,6 @@ export function useScheduleData(): { version: string } {
       setScheduleData(cached);
       setVersion(cached.generatedAt ?? "cached");
     }
-
-    const scheduleUrl = resolveScheduleUrl();
-    if (!scheduleUrl) return;
 
     let cancelled = false;
 

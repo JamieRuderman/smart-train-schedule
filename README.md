@@ -99,7 +99,8 @@ Train schedule data is organized by:
 
 - Set the `TRANSIT_511_API_KEY` environment variable with your 511.org developer token (the updater automatically reads it from `.env`, `.env.local`, or your shell environment).
 - Run `npm run update-transit` to download the latest SMART (`operator_id=SA`) and Golden Gate Ferry (`operator_id=GF`) GTFS feeds and rewrite the generated data under `src/data/generated/`.
-- The `npm run update-build` script (ideal for Vercel builds) runs the update step before compiling so deployments stay in sync with the latest feeds.
+- `npm run build` is sufficient for Vercel deploys. It always emits `public/data/schedules.json` from the generated source data during `prebuild`.
+- Use `npm run update-build` only when you intentionally want to refresh from 511.org and then build.
 - A ready-to-use GitHub Action lives at `.github/workflows/update-transit.yml`; add the `TRANSIT_511_API_KEY` repository secret and it will run weekly on the Hobby tier without additional cost.
 - If you need more frequent updates later, you can add a Vercel Cron Job that hits a serverless function which triggers a redeploy, but the GitHub Action workflow keeps everything free today.
 
@@ -108,8 +109,8 @@ Train schedule data is organized by:
 ### Available Scripts
 
 - `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run update-build` - Update transit data then build (attach this to Vercel)
+- `npm run build` - Build for production (includes generating `public/data/schedules.json`)
+- `npm run update-build` - Refresh from 511.org, then build
 - `npm run update-transit` - Refresh schedules from the 511.org GTFS feeds
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
